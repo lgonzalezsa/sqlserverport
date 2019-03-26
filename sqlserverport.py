@@ -16,11 +16,12 @@ import socket
 
 """sqlserverport
 
-A module to query the SQL Browser service for the port number of a SQL Server instance.
+A module to query the SQL Browser service for the port number of a
+ SQL Server instance.
 """
 
 
-def lookup(server, instance):
+def port_lookup(server, instance):
     """Query the SQL Browser service and extract the port number
 
     :type server: str
@@ -40,7 +41,8 @@ def lookup(server, instance):
     # response_type = response[0]  # \x05
     # response_length = response[1:3]  # 2 bytes, little-endian
     response_list = response[3:].decode().split(';')
-    response_dict = {response_list[i]: response_list[i+1] for i in range(0, len(response_list), 2)}
+    response_dict = {response_list[i]: response_list[i+1]
+                     for i in range(0, len(response_list), 2)}
 
     return int(response_dict['tcp'])
 
@@ -53,11 +55,16 @@ if __name__ == '__main__':
     try:
         message = r'instance \{0} is listening on port {1}'.format(
             instance_name,
-            lookup(server_name, instance_name))
+            port_lookup(server_name, instance_name))
     except KeyError as no_tcp:
-        message = '(instance {} is not configured to accept TCP/IP connections)'.format(instance_name)
+        message = (
+            '(instance {} is not configured to accept TCP/IP connections), {}'
+            .format(instance_name, no_tcp)
+        )
     except socket.timeout as no_response:
-        message = '(no response from SQL Browser service on {})'.format(server_name)
+        message = '(no response from SQL Browser service on {}, {})'.format(
+            server_name, no_response)
     except ConnectionResetError as no_connect:
-        message = '(cannot connect to SQL Browser service on {})'.format(server_name)
+        message = '(cannot connect to SQL Browser service on {}, {})'.format(
+            server_name, no_connect)
     print(message)
