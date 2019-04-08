@@ -47,6 +47,7 @@ def port_lookup(server, instance):
     return int(response_dict['tcp'])
 
 
+'''
 if __name__ == '__main__':
     # test data
     server_name = '127.0.0.1'
@@ -68,3 +69,4 @@ if __name__ == '__main__':
         message = '(cannot connect to SQL Browser service on {}, {})'.format(
             server_name, no_connect)
     print(message)
+'''
