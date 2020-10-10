@@ -1,2 +1,4 @@
 __pycache__/__init__.cpython-37.pyc
 __pycache__/sqlserverport.cpython-37.pyc
+sqlserverport.py.bandit
+sqlserverport.py.bandit.json
